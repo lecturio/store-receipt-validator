@@ -44,12 +44,20 @@ class Response implements SubscriptionInterface
     // This receipt is from the production environment, but it was sent to the test environment for verification. Send it to the production environment instead.
     const RESULT_PRODUCTION_RECEIPT_SENT_TO_SANDBOX = 21008;
 
+    // envirements
+    const ENV_SANDBOX = 'Sandbox';
+
     /**
      * Result Code
      *
      * @var int
      */
     protected $_code;
+
+    /**
+     * @var string
+     */
+    private $_environment = '';
 
     /**
      * bundle_id (app) belongs to the receipt
@@ -149,6 +157,14 @@ class Response implements SubscriptionInterface
         $this->_code = $code;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->_environment;
     }
 
     /**
@@ -279,6 +295,7 @@ class Response implements SubscriptionInterface
             is_array($jsonResponse['receipt']['in_app'])
         ) {
             $this->_code = $jsonResponse['status'];
+            $this->_environment = isset($jsonResponse['environment']) ? $jsonResponse['environment'] : '';
             $this->_receipt = $jsonResponse['receipt'];
             $this->_app_item_id = $this->_receipt['app_item_id'];
             $this->_purchases = $jsonResponse['receipt']['in_app'];
