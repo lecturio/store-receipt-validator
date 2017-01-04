@@ -300,10 +300,11 @@ class Response implements SubscriptionInterface
             $this->_app_item_id = $this->_receipt['app_item_id'];
             $this->_purchases = $jsonResponse['receipt']['in_app'];
             if (isset($this->_purchases[0])) {
-                $this->_transaction_id = end($this->_purchases)['transaction_id'];
-                $this->_original_transaction_id = end($this->_purchases)['original_transaction_id'];
-                $this->_product_id = end($this->_purchases)['product_id'];
-                $this->_expires_date = end($this->_purchases)['expires_date_ms'];
+                $lastPurchase = end($this->_purchases);
+                $this->_transaction_id = $lastPurchase['transaction_id'];
+                $this->_original_transaction_id = $lastPurchase['original_transaction_id'];
+                $this->_product_id = $lastPurchase['product_id'];
+                $this->_expires_date = (isset($lastPurchase['expires_date_ms'])) ? $lastPurchase['expires_date_ms'] : 0;
             }
 
             if (array_key_exists('bundle_id', $jsonResponse['receipt'])) {
@@ -313,10 +314,11 @@ class Response implements SubscriptionInterface
             if (array_key_exists('latest_receipt_info', $jsonResponse)) {
                 $this->_latest_receipt_info = $jsonResponse['latest_receipt_info'];
                 if (isset($this->_latest_receipt_info[0])) {
-                    $this->_transaction_id = end($this->_latest_receipt_info)['transaction_id'];
-                    $this->_original_transaction_id = end($this->_latest_receipt_info)['original_transaction_id'];
-                    $this->_product_id = end($this->_latest_receipt_info)['product_id'];
-                    $this->_expires_date = end($this->_latest_receipt_info)['expires_date_ms'];
+                    $latestReceiptInfo = end($this->_latest_receipt_info);
+                    $this->_transaction_id = $latestReceiptInfo['transaction_id'];
+                    $this->_original_transaction_id = $latestReceiptInfo['original_transaction_id'];
+                    $this->_product_id = $latestReceiptInfo['product_id'];
+                    $this->_expires_date = (isset($latestReceiptInfo['expires_date_ms'])) ? $latestReceiptInfo['expires_date_ms'] : 0;
                 }
             }
 
