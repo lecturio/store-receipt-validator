@@ -304,7 +304,7 @@ class Response implements SubscriptionInterface
                 $this->_transaction_id = $lastPurchase['transaction_id'];
                 $this->_original_transaction_id = $lastPurchase['original_transaction_id'];
                 $this->_product_id = $lastPurchase['product_id'];
-                $this->_expires_date = (isset($lastPurchase['expires_date_ms'])) ? $lastPurchase['expires_date_ms'] : 0;
+                $this->_expires_date = (isset($lastPurchase['expires_date_ms'])) ? $lastPurchase['expires_date_ms'] : (int) $lastPurchase['expires_date'];
             }
 
             if (array_key_exists('bundle_id', $jsonResponse['receipt'])) {
@@ -318,7 +318,7 @@ class Response implements SubscriptionInterface
                     $this->_transaction_id = $latestReceiptInfo['transaction_id'];
                     $this->_original_transaction_id = $latestReceiptInfo['original_transaction_id'];
                     $this->_product_id = $latestReceiptInfo['product_id'];
-                    $this->_expires_date = (isset($latestReceiptInfo['expires_date_ms'])) ? $latestReceiptInfo['expires_date_ms'] : 0;
+                    $this->_expires_date = (isset($latestReceiptInfo['expires_date_ms'])) ? $latestReceiptInfo['expires_date_ms'] : (int) $latestReceiptInfo['expires_date'];
                 }
             }
 
