@@ -289,15 +289,25 @@ class Response implements SubscriptionInterface
             throw new RuntimeException('Response must be a scalar value');
         }
 
+        if (array_key_exists('receipt', $jsonResponse)) {
+            // ios <= 6.0 validation
+            $this->_code = $jsonResponse['status'];
+
+            $this->_receipt = $jsonResponse['receipt'];
+            $this->_purchases = array($jsonResponse['receipt']);
+
+            if (array_key_exists('bid', $jsonResponse['receipt'])) {
+                $this->_bundle_id = $jsonResponse['receipt']['bid'];
+            }
+        }
+
         // ios > 7 receipt validation
         if (array_key_exists('receipt', $jsonResponse) && is_array($jsonResponse['receipt'])
         ) {
-            $this->_code = $jsonResponse['status'];
             $this->_environment = isset($jsonResponse['environment']) ? $jsonResponse['environment'] : '';
-            $this->_receipt = $jsonResponse['receipt'];
-            $this->_app_item_id = $this->_receipt['app_item_id'];
-            $this->_purchases = isset($jsonResponse['receipt']['in_app']) ? $jsonResponse['receipt']['in_app'] : array();
-            if (isset($this->_purchases[0])) {
+            $this->_app_item_id = (isset($this->_receipt['app_item_id'])) ? $this->_receipt['app_item_id'] : null;
+            $this->_purchases = isset($jsonResponse['receipt']['in_app']) ? $jsonResponse['receipt']['in_app'] : $this->_purchases;
+            if (isset($jsonResponse['receipt']['in_app']) && isset($this->_purchases[0])) {
                 $lastPurchase = end($this->_purchases);
                 $this->_transaction_id = $lastPurchase['transaction_id'];
                 $this->_original_transaction_id = $lastPurchase['original_transaction_id'];
@@ -322,18 +332,6 @@ class Response implements SubscriptionInterface
 
             if (array_key_exists('latest_receipt', $jsonResponse)) {
                 $this->_latest_receipt = $jsonResponse['latest_receipt'];
-            }
-        } elseif (array_key_exists('receipt', $jsonResponse)) {
-            // ios <= 6.0 validation
-            $this->_code = $jsonResponse['status'];
-
-            if (array_key_exists('receipt', $jsonResponse)) {
-                $this->_receipt = $jsonResponse['receipt'];
-                $this->_purchases = array($jsonResponse['receipt']);
-
-                if (array_key_exists('bid', $jsonResponse['receipt'])) {
-                    $this->_bundle_id = $jsonResponse['receipt']['bid'];
-                }
             }
         } elseif (array_key_exists('status', $jsonResponse)) {
             $this->_code = $jsonResponse['status'];
