@@ -311,12 +311,12 @@ class Response implements SubscriptionInterface
 
             if (array_key_exists('latest_receipt_info', $jsonResponse)) {
                 $this->_latest_receipt_info = $jsonResponse['latest_receipt_info'];
-                if (isset($this->_latest_receipt_info[0])) {
-                    $latestReceiptInfo = end($this->_latest_receipt_info);
+                $latestReceiptInfo = (isset($this->_latest_receipt_info[0])) ? end($this->_latest_receipt_info) : $this->_latest_receipt_info;
+                if (is_array($latestReceiptInfo)) {
                     $this->_transaction_id = $latestReceiptInfo['transaction_id'];
                     $this->_original_transaction_id = $latestReceiptInfo['original_transaction_id'];
                     $this->_product_id = $latestReceiptInfo['product_id'];
-                    $this->_expires_date = (isset($latestReceiptInfo['expires_date_ms'])) ? $latestReceiptInfo['expires_date_ms'] : (int) $latestReceiptInfo['expires_date'];
+                    $this->_expires_date = (isset($latestReceiptInfo['expires_date_ms'])) ? $latestReceiptInfo['expires_date_ms'] : 0;
                 }
             }
 
