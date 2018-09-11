@@ -290,21 +290,19 @@ class Response implements SubscriptionInterface
         }
 
         // ios > 7 receipt validation
-        if (array_key_exists('receipt', $jsonResponse) &&
-            is_array($jsonResponse['receipt']) && array_key_exists('in_app', $jsonResponse['receipt']) &&
-            is_array($jsonResponse['receipt']['in_app'])
+        if (array_key_exists('receipt', $jsonResponse) && is_array($jsonResponse['receipt'])
         ) {
             $this->_code = $jsonResponse['status'];
             $this->_environment = isset($jsonResponse['environment']) ? $jsonResponse['environment'] : '';
             $this->_receipt = $jsonResponse['receipt'];
             $this->_app_item_id = $this->_receipt['app_item_id'];
-            $this->_purchases = $jsonResponse['receipt']['in_app'];
+            $this->_purchases = isset($jsonResponse['receipt']['in_app']) ? $jsonResponse['receipt']['in_app'] : array();
             if (isset($this->_purchases[0])) {
                 $lastPurchase = end($this->_purchases);
                 $this->_transaction_id = $lastPurchase['transaction_id'];
                 $this->_original_transaction_id = $lastPurchase['original_transaction_id'];
                 $this->_product_id = $lastPurchase['product_id'];
-                $this->_expires_date = (isset($lastPurchase['expires_date_ms'])) ? $lastPurchase['expires_date_ms'] : (int) $lastPurchase['expires_date'];
+                $this->_expires_date = (isset($lastPurchase['expires_date_ms'])) ? $lastPurchase['expires_date_ms'] : 0;
             }
 
             if (array_key_exists('bundle_id', $jsonResponse['receipt'])) {
