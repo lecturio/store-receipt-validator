@@ -61,9 +61,9 @@ class iTunesResponseTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function testReceiptWithLatestReceiptInfo()
+    public function testSubscriptionReceiptWithLatestReceiptInfo()
     {
-        $jsonResponseString = file_get_contents(__DIR__ . '/fixtures/inAppPurchaseResponse.json');
+        $jsonResponseString = file_get_contents(__DIR__ . '/fixtures/SubscriptionResponseProduction.json');
         $jsonResponseArray = json_decode($jsonResponseString, true);
 
         $response = new Response($jsonResponseArray);
@@ -81,14 +81,44 @@ class iTunesResponseTest extends PHPUnit_Framework_TestCase
             'receipt bundle id must match');
         $this->assertEquals($jsonResponseArray['receipt']['app_item_id'], $response->getAppItemId(),
             'receipt app item id must match');
-        $this->assertEquals(end($jsonResponseArray['latest_receipt_info'])['transaction_id'],
+        $this->assertEquals('30000789813124',
             $response->getTransactionId(), 'receipt transaction id must match');
-        $this->assertEquals(end($jsonResponseArray['latest_receipt_info'])['original_transaction_id'],
+        $this->assertEquals('30000757253823',
             $response->getOriginalTransactionId(), 'receipt original transaction id must match');
-        $this->assertEquals(end($jsonResponseArray['latest_receipt_info'])['product_id'], $response->getProductId(),
+        $this->assertEquals('Subscription_MedicineFlat_1Month', $response->getProductId(),
             'receipt product id must match');
-        $this->assertEquals(end($jsonResponseArray['latest_receipt_info'])['expires_date_ms'],
+        $this->assertEquals('1595860505000',
             $response->getExpiresDate(), 'receipt expires date must match');
         $this->assertEquals($jsonResponseArray, $response->getRawResponse(), 'original receipt');
     }
+
+    public function testPurchaseReceiptWithLatestReceiptInfo()
+    {
+        $jsonResponseString = file_get_contents(__DIR__ . '/fixtures/PurchaseResponseProduction.json');
+        $jsonResponseArray = json_decode($jsonResponseString, true);
+
+        $response = new Response($jsonResponseArray);
+
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $jsonResponseArray['receipt']['in_app']);
+
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $response->getLatestReceipt());
+        $this->assertEquals($jsonResponseArray['latest_receipt'], $response->getLatestReceipt(),
+            'latest receipt must match');
+
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_STRING, $response->getBundleId());
+        $this->assertEquals($jsonResponseArray['receipt']['bundle_id'], $response->getBundleId(),
+            'receipt bundle id must match');
+        $this->assertEquals($jsonResponseArray['receipt']['app_item_id'], $response->getAppItemId(),
+            'receipt app item id must match');
+        $this->assertEquals('30000789813124',
+            $response->getTransactionId(), 'receipt transaction id must match');
+        $this->assertEquals('30000757253823',
+            $response->getOriginalTransactionId(), 'receipt original transaction id must match');
+        $this->assertEquals('Subscription_MedicineFlat_1Month', $response->getProductId(),
+            'receipt product id must match');
+        $this->assertEquals('1595860505000',
+            $response->getExpiresDate(), 'receipt expires date must match');
+        $this->assertEquals($jsonResponseArray, $response->getRawResponse(), 'original receipt');
+    }
+
 }
