@@ -169,7 +169,7 @@ class Validator
       $this->setSharedSecret($sharedSecret);
     }
 
-    $httpResponse = $this->getClient()->request('POST', null, ['body' => $this->encodeRequest(), 'verify' => $verifySSL]);
+    $httpResponse = $this->getClient()->request('POST', '', ['body' => $this->encodeRequest(), 'verify' => $verifySSL]);
 
     if ($httpResponse->getStatusCode() != 200) {
       throw new RunTimeException('Unable to get response from itunes server');
