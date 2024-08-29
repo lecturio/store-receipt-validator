@@ -3,7 +3,7 @@
 /**
  * @group library
  */
-class ExceptionsTest extends \PHPUnit_Framework_TestCase
+class ExceptionsTest extends \PHPUnit\Framework\TestCase
 {
 
   public function testRunTimeException()

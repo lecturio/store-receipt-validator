@@ -31,7 +31,7 @@ abstract class AbstractResponse
     public function __construct($response)
     {
         $this->response = $response;
-        $this->developerPayload = json_decode($this->response->developerPayload, true);
+        $this->developerPayload = json_decode((string) $this->response->developerPayload, true);
     }
 
     /**

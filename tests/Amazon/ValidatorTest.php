@@ -5,7 +5,7 @@ use ReceiptValidator\Amazon\Response;
 /**
  * @group library
  */
-class AmazonValidatorTest extends PHPUnit_Framework_TestCase
+class AmazonValidatorTest extends \PHPUnit\Framework\TestCase
 {
 
   /**
@@ -13,7 +13,7 @@ class AmazonValidatorTest extends PHPUnit_Framework_TestCase
    */
   private $validator;
 
-  public function setUp()
+  public function setUp(): void
   {
     parent::setUp();
 

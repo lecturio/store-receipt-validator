@@ -5,7 +5,7 @@ namespace ReceiptValidator\GooglePlay;
 /**
  * @group library
  */
-class GooglePlayValidatorTest extends \PHPUnit_Framework_TestCase
+class GooglePlayValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      *

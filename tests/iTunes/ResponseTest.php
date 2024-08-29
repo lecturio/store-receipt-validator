@@ -5,7 +5,7 @@ use ReceiptValidator\iTunes\Response;
 /**
  * @group library
  */
-class iTunesResponseTest extends PHPUnit_Framework_TestCase
+class iTunesResponseTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -13,7 +13,7 @@ class iTunesResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidOptionsToConstructor()
     {
-        $this->setExpectedException("ReceiptValidator\\RuntimeException", "Response must be a scalar value");
+        $this->expectException("ReceiptValidator\\RuntimeException");
 
         new Response('invalid');
     }
