@@ -182,7 +182,7 @@ class Validator
     if ($this->_endpoint == self::ENDPOINT_PRODUCTION && $response->getResultCode() == Response::RESULT_SANDBOX_RECEIPT_SENT_TO_PRODUCTION) {
       $client = new \GuzzleHttp\Client(['base_uri' => self::ENDPOINT_SANDBOX]);
 
-      $httpResponse = $client->request('POST', null, ['body' => $this->encodeRequest(), 'verify' => $verifySSL]);
+      $httpResponse = $client->request('POST', '', ['body' => $this->encodeRequest(), 'verify' => $verifySSL]);
 
       if ($httpResponse->getStatusCode() != 200) {
         throw new RunTimeException('Unable to get response from itunes server');
